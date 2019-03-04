@@ -1,11 +1,16 @@
 package main
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"os/signal"
+	"sync"
 	"syscall"
 	"time"
 
@@ -116,8 +121,99 @@ func sub_mqtt() {
 	fmt.Println(<-sigChan, "signal received")
 }
 
+type TdmaServerAPI struct{}
+
+// JoinReqPayload defines the JoinReq message payload.
+type TdmaPayload struct {
+	TestData string `json:"TestData"`
+}
+
+// NewTdmaServerAPI create a new TdmaServerAPI.
+func NewTdmaServerAPI() http.Handler {
+	return &TdmaServerAPI{}
+}
+
+// ServeHTTP implements the http.Handler interface.
+func (a *TdmaServerAPI) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	var req TdmaPayload
+
+	b, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		fmt.Println("ioutil.ReadAll error")
+		return
+	}
+
+	err = json.Unmarshal(b, &req)
+	if err != nil {
+		fmt.Println("json.Unmarshal error")
+		return
+	}
+
+	fmt.Println("req:", req)
+	w.WriteHeader(http.StatusOK)
+
+	req.TestData = "ans data"
+
+	ans, err := json.Marshal(req)
+	if err != nil {
+		fmt.Println("marshal json error")
+		return
+	}
+
+	w.Write(ans)
+}
+
+func http_client() {
+	var ans TdmaPayload
+	var pl TdmaPayload = TdmaPayload{
+		TestData: "req data",
+	}
+
+	b, err := json.Marshal(pl)
+	if err != nil {
+		fmt.Println("json.Marshal error")
+		return
+	}
+
+	svr_addr := "http://localhost:5555"
+	resp, err := http.Post(svr_addr, "application/json", bytes.NewReader(b))
+	if err != nil {
+		fmt.Println("http.Post error", err)
+		return
+	}
+	defer resp.Body.Close()
+
+	err = json.NewDecoder(resp.Body).Decode(&ans)
+	if err != nil {
+		fmt.Println("json.NewDecoder error")
+		return
+	}
+	fmt.Println("ans:", ans)
+}
+
+func http_server(wg *sync.WaitGroup) {
+	defer wg.Done()
+	addr := "0.0.0.0:5555"
+	server := http.Server{
+		Handler: NewTdmaServerAPI(),
+		Addr:    addr,
+	}
+
+	err := server.ListenAndServe()
+	if err != nil {
+		fmt.Println("tdma-server api error")
+		return
+	}
+}
+
 func main() {
+	var wg sync.WaitGroup
+	wg.Add(1) //TODO
 	//enqueue_devq()
 	//enqueue_multicastq()
-	sub_mqtt()
+	//sub_mqtt()
+
+	//go http_server(&wg)
+	http_client()
+	wg.Wait()
 }
