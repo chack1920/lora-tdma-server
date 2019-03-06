@@ -14,7 +14,7 @@ import (
 	"syscall"
 	"time"
 
-	pb "github.com/brocaar/lr_paper_tdma/api"
+	pb "github.com/lioneie/lora-app-server/api"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 
@@ -213,7 +213,7 @@ func main() {
 	//enqueue_multicastq()
 	//sub_mqtt()
 
-	//go http_server(&wg)
-	http_client()
+	go http_server(&wg)
+	//http_client()
 	wg.Wait()
 }
