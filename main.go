@@ -14,11 +14,12 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/eclipse/paho.mqtt.golang"
 	pb "github.com/lioneie/lora-app-server/api"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 
-	"github.com/eclipse/paho.mqtt.golang"
+	"github.com/lioneie/lorawan"
 )
 
 const (
@@ -123,11 +124,6 @@ func sub_mqtt() {
 
 type TdmaServerAPI struct{}
 
-// JoinReqPayload defines the JoinReq message payload.
-type TdmaPayload struct {
-	TestData string `json:"TestData"`
-}
-
 // NewTdmaServerAPI create a new TdmaServerAPI.
 func NewTdmaServerAPI() http.Handler {
 	return &TdmaServerAPI{}
@@ -135,55 +131,60 @@ func NewTdmaServerAPI() http.Handler {
 
 // ServeHTTP implements the http.Handler interface.
 func (a *TdmaServerAPI) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	var req TdmaPayload
+	var req lorawan.TdmaReqPayload
 
-	b, err := ioutil.ReadAll(r.Body)
+	reqb, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		fmt.Println("ioutil.ReadAll error")
 		return
 	}
 
-	err = json.Unmarshal(b, &req)
+	err = json.Unmarshal(reqb, &req)
 	if err != nil {
 		fmt.Println("json.Unmarshal error")
 		return
 	}
 
 	fmt.Println("req:", req)
-	w.WriteHeader(http.StatusOK)
 
-	req.TestData = "ans data"
+	var ans lorawan.TdmaAnsPayload = lorawan.TdmaAnsPayload{
+		DevEUI: req.DevEUI,
+		McSeq:  55, //TODO
+	}
 
-	ans, err := json.Marshal(req)
+	ansb, err := json.Marshal(ans)
 	if err != nil {
 		fmt.Println("marshal json error")
 		return
 	}
 
-	w.Write(ans)
+	w.WriteHeader(http.StatusOK)
+	w.Write(ansb)
 }
 
 func http_client() {
-	var ans TdmaPayload
-	var pl TdmaPayload = TdmaPayload{
-		TestData: "req data",
+	var ans lorawan.TdmaAnsPayload
+	var req lorawan.TdmaReqPayload = lorawan.TdmaReqPayload{
+		DevEUI:  lorawan.EUI64{0, 0, 0, 0, 0, 0, 0, 5},
+		DevAddr: lorawan.DevAddr{0, 0, 0, 5},
+		TxCycle: 55,
 	}
 
-	b, err := json.Marshal(pl)
+	reqb, err := json.Marshal(req)
 	if err != nil {
 		fmt.Println("json.Marshal error")
 		return
 	}
 
 	svr_addr := "http://localhost:5555"
-	resp, err := http.Post(svr_addr, "application/json", bytes.NewReader(b))
+	ansb, err := http.Post(svr_addr, "application/json", bytes.NewReader(reqb))
 	if err != nil {
 		fmt.Println("http.Post error", err)
 		return
 	}
-	defer resp.Body.Close()
+	defer ansb.Body.Close()
 
-	err = json.NewDecoder(resp.Body).Decode(&ans)
+	err = json.NewDecoder(ansb.Body).Decode(&ans)
 	if err != nil {
 		fmt.Println("json.NewDecoder error")
 		return
