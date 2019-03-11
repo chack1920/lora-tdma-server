@@ -63,7 +63,7 @@
   name = "github.com/lioneie/lora-app-server"
   packages = ["api"]
   pruneopts = "UT"
-  revision = "97cc6bd7046ed34fa2e3912087df6ecf845ca0ee"
+  revision = "bf1e140e4a04471cf1f1b36900ef1e96c151678a"
 
 [[projects]]
   branch = "lioneie_v2.4.1"
@@ -74,18 +74,18 @@
     "api/gw",
   ]
   pruneopts = "UT"
-  revision = "ae9469cecc0ae7b6a3375ab11c2fb53b3afae575"
+  revision = "8702710c592052ab4815e36c1406b119c96a41db"
 
 [[projects]]
   branch = "lioneie"
-  digest = "1:19bf784a5587b6f160d6416ee2e0b6704065f49b983d36e6cbe63edc96f3c648"
+  digest = "1:6b0551c63a3f82e8136c06d5280657a627ec3b8653e79517c9c9d09dd3d254de"
   name = "github.com/lioneie/lorawan"
   packages = [
     ".",
     "band",
   ]
   pruneopts = "UT"
-  revision = "90de31ccdb0052b069e5ae1287a54de471b083c1"
+  revision = "d486c0cd55f00e6f6c2578db08d307bc5a797b91"
 
 [[projects]]
   branch = "master"
@@ -195,6 +195,7 @@
   input-imports = [
     "github.com/eclipse/paho.mqtt.golang",
     "github.com/lioneie/lora-app-server/api",
+    "github.com/lioneie/lorawan",
     "google.golang.org/grpc",
     "google.golang.org/grpc/metadata",
   ]
