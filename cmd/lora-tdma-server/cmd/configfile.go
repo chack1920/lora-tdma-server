@@ -19,6 +19,11 @@ log_level={{ .General.LogLevel }}
 # The number of times passwords must be hashed. A higher number is safer as
 # an attack takes more time to perform.
 password_hash_iterations={{ .General.PasswordHashIterations }}
+
+# Tdma-server configuration.
+[tdma_server]
+# ip:port to bind the tdma-server api interface to
+bind="{{ .TdmaServer.Bind }}"
 `
 
 var configCmd = &cobra.Command{

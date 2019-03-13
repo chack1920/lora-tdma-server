@@ -34,6 +34,7 @@ func init() {
 
 	// defaults
 	viper.SetDefault("general.password_hash_iterations", 100000)
+	viper.SetDefault("tdma_server.bind", "0.0.0.0:5555")
 
 	rootCmd.AddCommand(versionCmd)
 	rootCmd.AddCommand(configCmd)
@@ -60,12 +61,10 @@ func initConfig() {
 	} else {
 		viper.SetConfigName("lora-tdma-server")
 		viper.AddConfigPath(".")
-		viper.AddConfigPath("$HOME/.config/lora-app-server")
-		viper.AddConfigPath("/etc/lora-app-server")
 		if err := viper.ReadInConfig(); err != nil {
 			switch err.(type) {
 			case viper.ConfigFileNotFoundError:
-				log.Warning("No configuration file found, using defaults. See: https://www.loraserver.io/lora-app-server/install/config/")
+				log.Warning("No configuration file found, using defaults.")
 			default:
 				log.WithError(err).Fatal("read configuration file error")
 			}

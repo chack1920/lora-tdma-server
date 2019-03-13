@@ -7,7 +7,7 @@ import (
 	//"fmt"
 	//"io/ioutil"
 	//"net"
-	//"net/http"
+	"net/http"
 	"os"
 	"os/signal"
 	//"strings"
@@ -31,7 +31,7 @@ import (
 	//"google.golang.org/grpc"
 	//"google.golang.org/grpc/credentials"
 	//pb "github.com/lioneie/lora-app-server/api"
-	//"github.com/lioneie/lora-app-server/internal/api"
+	"github.com/lioneie/lora-tdma-server/internal/api"
 	//"github.com/lioneie/lora-app-server/internal/api/auth"
 	"github.com/lioneie/lora-tdma-server/internal/config"
 	//"github.com/lioneie/lora-app-server/internal/downlink"
@@ -96,5 +96,18 @@ func printStartMessage() error {
 }
 
 func startTdmaServerAPI() error {
+	log.WithFields(log.Fields{
+		"bind": config.C.TdmaServer.Bind,
+	}).Info("starting tdma-server api")
+
+	server := http.Server{
+		Handler: api.NewTdmaServerAPI(),
+		Addr:    config.C.TdmaServer.Bind,
+	}
+
+	go func() {
+		err := server.ListenAndServe()
+		log.WithError(err).Error("tdma-server api error")
+	}()
 	return nil
 }

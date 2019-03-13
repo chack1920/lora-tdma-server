@@ -17,6 +17,9 @@ type Config struct {
 		LogLevel               int `mapstructure:"log_level"`
 		PasswordHashIterations int `mapstructure:"password_hash_iterations"`
 	}
+	TdmaServer struct {
+		Bind string
+	} `mapstructure:"tdma_server"`
 }
 
 // C holds the global configuration.
