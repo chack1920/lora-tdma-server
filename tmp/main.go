@@ -82,9 +82,10 @@ func enqueue_multicastq() {
 	var mc_data []byte = []byte{0xa, 0xb, 0xc, 0xd, 0xe}
 	r, err := c.Enqueue(ctx, &pb.EnqueueMulticastQueueItemRequest{
 		MulticastQueueItem: &pb.MulticastQueueItem{
-			MulticastGroupId: "4a21c7f8-4111-4e46-97c9-2986ca60bac5",
-			FPort:            5,
-			Data:             mc_data,
+			MulticastGroupId: "4a21c7f8-4111-4e46-97c9-2986ca60bac5", //classC
+			//MulticastGroupId: "2b38cd35-c36b-4b5d-91b1-5ab085d2335d",//classB
+			FPort: 5,
+			Data:  mc_data,
 		},
 	})
 	if err != nil {
@@ -211,10 +212,10 @@ func main() {
 	var wg sync.WaitGroup
 	wg.Add(1) //TODO
 	//enqueue_devq()
-	//enqueue_multicastq()
+	enqueue_multicastq()
 	//sub_mqtt()
 
-	go http_server(&wg)
+	//go http_server(&wg)
 	//http_client()
 	wg.Wait()
 }
