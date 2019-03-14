@@ -13,20 +13,195 @@
   version = "v1.1.1"
 
 [[projects]]
+  digest = "1:b8e46955e8385b06d7b0b26165cdb7216dec8bce1cfcc05499cdd9da8af15445"
+  name = "github.com/golang/protobuf"
+  packages = [
+    "jsonpb",
+    "proto",
+    "protoc-gen-go/descriptor",
+    "protoc-gen-go/generator",
+    "protoc-gen-go/generator/internal/remap",
+    "protoc-gen-go/plugin",
+    "ptypes",
+    "ptypes/any",
+    "ptypes/duration",
+    "ptypes/empty",
+    "ptypes/struct",
+    "ptypes/timestamp",
+    "ptypes/wrappers",
+  ]
+  pruneopts = "UT"
+  revision = "c823c79ea1570fb5ff454033735a8e68575d1d0f"
+  version = "v1.3.0"
+
+[[projects]]
+  digest = "1:4cbbca3db0ff89197d000fb2fa0b90ca4516a7fbd4d8cd9fa4bebf17df484f6d"
+  name = "github.com/grpc-ecosystem/grpc-gateway"
+  packages = [
+    "internal",
+    "runtime",
+    "utilities",
+  ]
+  pruneopts = "UT"
+  revision = "e81e272f3e6fbdf9cd2837112cedf837191d3a3f"
+  version = "v1.8.4"
+
+[[projects]]
   branch = "master"
-  digest = "1:7b9fdf110cdbe98f41436d1d3b6e0c648920dab6f36a399a8e688c70ae3c7c92"
+  digest = "1:c231cdb133bc5f7267b07770e84ad6a0007bb26e99a97a7d1d6b20dd25913551"
+  name = "github.com/jacobsa/crypto"
+  packages = [
+    "cmac",
+    "common",
+  ]
+  pruneopts = "UT"
+  revision = "d95898ceee0769dac9bf74c46f8f68d3d3d79100"
+
+[[projects]]
+  branch = "lioneie_v2.4.1"
+  digest = "1:6c266fec344971f91dddd91c27d4b811334ebfeef16083c657ab8e5aea909a02"
+  name = "github.com/lioneie/lora-app-server"
+  packages = ["api"]
+  pruneopts = "UT"
+  revision = "bf1e140e4a04471cf1f1b36900ef1e96c151678a"
+
+[[projects]]
+  branch = "lioneie_v2.4.1"
+  digest = "1:99f73c735e291da83bd1d23e0dbfbeee8ca83a33694cfee6442ff2d50b3c5333"
+  name = "github.com/lioneie/loraserver"
+  packages = [
+    "api/common",
+    "api/gw",
+  ]
+  pruneopts = "UT"
+  revision = "8702710c592052ab4815e36c1406b119c96a41db"
+
+[[projects]]
+  branch = "lioneie"
+  digest = "1:6b0551c63a3f82e8136c06d5280657a627ec3b8653e79517c9c9d09dd3d254de"
+  name = "github.com/lioneie/lorawan"
+  packages = [
+    ".",
+    "band",
+  ]
+  pruneopts = "UT"
+  revision = "d486c0cd55f00e6f6c2578db08d307bc5a797b91"
+
+[[projects]]
+  branch = "master"
+  digest = "1:a5736fff5e55d0ee5892ba211adaa776ced740829c685a560e8b8a520747059d"
   name = "golang.org/x/net"
   packages = [
+    "context",
+    "http/httpguts",
+    "http2",
+    "http2/hpack",
+    "idna",
     "internal/socks",
+    "internal/timeseries",
     "proxy",
+    "trace",
     "websocket",
   ]
   pruneopts = "UT"
   revision = "16b79f2e4e95ea23b2bf9903c9809ff7b013ce85"
 
+[[projects]]
+  branch = "master"
+  digest = "1:f36c7b9a36158e62ffe5d8b02d1b5955500c13106cdaeebf5323d88863cae96f"
+  name = "golang.org/x/sys"
+  packages = ["unix"]
+  pruneopts = "UT"
+  revision = "fead79001313d15903fb4605b4a1b781532cd93e"
+
+[[projects]]
+  digest = "1:a2ab62866c75542dd18d2b069fec854577a20211d7c0ea6ae746072a1dccdd18"
+  name = "golang.org/x/text"
+  packages = [
+    "collate",
+    "collate/build",
+    "internal/colltab",
+    "internal/gen",
+    "internal/tag",
+    "internal/triegen",
+    "internal/ucd",
+    "language",
+    "secure/bidirule",
+    "transform",
+    "unicode/bidi",
+    "unicode/cldr",
+    "unicode/norm",
+    "unicode/rangetable",
+  ]
+  pruneopts = "UT"
+  revision = "f21a4dfb5e38f5895301dc265a8def02365cc3d0"
+  version = "v0.3.0"
+
+[[projects]]
+  branch = "master"
+  digest = "1:6323af2277308b9ddced244cc284acf3579ef05bb9d199337d0b70d80efd1fa3"
+  name = "google.golang.org/genproto"
+  packages = [
+    "googleapis/api/annotations",
+    "googleapis/api/httpbody",
+    "googleapis/rpc/status",
+    "protobuf/field_mask",
+  ]
+  pruneopts = "UT"
+  revision = "5fe7a883aa19554f42890211544aa549836af7b7"
+
+[[projects]]
+  digest = "1:cbc746de4662c66fd24a037501bd65aa0f8ad0bfca0c92576e0abb88864e3741"
+  name = "google.golang.org/grpc"
+  packages = [
+    ".",
+    "balancer",
+    "balancer/base",
+    "balancer/roundrobin",
+    "binarylog/grpc_binarylog_v1",
+    "codes",
+    "connectivity",
+    "credentials",
+    "credentials/internal",
+    "encoding",
+    "encoding/proto",
+    "grpclog",
+    "internal",
+    "internal/backoff",
+    "internal/binarylog",
+    "internal/channelz",
+    "internal/envconfig",
+    "internal/grpcrand",
+    "internal/grpcsync",
+    "internal/syscall",
+    "internal/transport",
+    "keepalive",
+    "metadata",
+    "naming",
+    "peer",
+    "resolver",
+    "resolver/dns",
+    "resolver/passthrough",
+    "stats",
+    "status",
+    "tap",
+  ]
+  pruneopts = "UT"
+  revision = "2fdaae294f38ed9a121193c51ec99fecd3b13eb7"
+  version = "v1.19.0"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  input-imports = ["github.com/eclipse/paho.mqtt.golang"]
+  input-imports = [
+    "github.com/eclipse/paho.mqtt.golang",
+    "github.com/eclipse/paho.mqtt.golang/packets",
+    "github.com/lioneie/lora-app-server/api",
+    "github.com/lioneie/lorawan",
+    "golang.org/x/net/proxy",
+    "golang.org/x/net/websocket",
+    "google.golang.org/grpc",
+    "google.golang.org/grpc/metadata",
+  ]
   solver-name = "gps-cdcl"
   solver-version = 1
