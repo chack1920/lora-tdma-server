@@ -21,7 +21,7 @@ import (
 	//"github.com/grpc-ecosystem/go-grpc-middleware/logging/logrus"
 	//"github.com/grpc-ecosystem/go-grpc-middleware/tags"
 	//"github.com/grpc-ecosystem/grpc-gateway/runtime"
-	//"github.com/pkg/errors"
+	"github.com/pkg/errors"
 	//migrate "github.com/rubenv/sql-migrate"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -43,7 +43,7 @@ import (
 	//"github.com/lioneie/lora-app-server/internal/migrations"
 	//"github.com/lioneie/lora-app-server/internal/nsclient"
 	//"github.com/lioneie/lora-app-server/internal/static"
-	//"github.com/lioneie/lora-app-server/internal/storage"
+	"github.com/lioneie/lora-tdma-server/internal/storage"
 	//"github.com/lioneie/loraserver/api/as"
 	"github.com/lioneie/lora-tdma-server/internal/mqttpubsub"
 )
@@ -58,6 +58,7 @@ func run(cmd *cobra.Command, args []string) error {
 		printStartMessage,
 		startTdmaServerAPI,
 		startMqttHandler,
+		setPostgreSQLConnection,
 	}
 
 	for _, t := range tasks {
@@ -132,5 +133,15 @@ func startMqttHandler() error {
 	if err != nil {
 		os.Exit(1)
 	}
+	return nil
+}
+
+func setPostgreSQLConnection() error {
+	log.Info("connecting to postgresql")
+	db, err := storage.OpenDatabase(config.C.PostgreSQL.DSN)
+	if err != nil {
+		return errors.Wrap(err, "database connection error")
+	}
+	config.C.PostgreSQL.DB = db
 	return nil
 }

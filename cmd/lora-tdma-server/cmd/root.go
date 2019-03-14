@@ -35,6 +35,8 @@ func init() {
 	// defaults
 	viper.SetDefault("general.password_hash_iterations", 100000)
 	viper.SetDefault("tdma_server.bind", "0.0.0.0:5555")
+	viper.SetDefault("postgresql.dsn", "postgres://loraserver_ts:dbpassword@127.0.0.1/loraserver_ts?sslmode=disable")
+	viper.SetDefault("postgresql.automigrate", true)
 
 	rootCmd.AddCommand(versionCmd)
 	rootCmd.AddCommand(configCmd)

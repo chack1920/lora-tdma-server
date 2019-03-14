@@ -1,14 +1,14 @@
 package config
 
 import (
-//"time"
+	//"time"
 
-//"github.com/gomodule/redigo/redis"
-//"github.com/lioneie/lora-app-server/internal/common"
-//"github.com/lioneie/lora-app-server/internal/handler"
-//"github.com/lioneie/lora-app-server/internal/handler/gcppubsub"
-//"github.com/lioneie/lora-app-server/internal/handler/mqtthandler"
-//"github.com/lioneie/lora-app-server/internal/nsclient"
+	//"github.com/gomodule/redigo/redis"
+	"github.com/lioneie/lora-tdma-server/internal/common"
+	//"github.com/lioneie/lora-app-server/internal/handler"
+	//"github.com/lioneie/lora-app-server/internal/handler/gcppubsub"
+	//"github.com/lioneie/lora-app-server/internal/handler/mqtthandler"
+	//"github.com/lioneie/lora-app-server/internal/nsclient"
 )
 
 // Config defines the configuration structure.
@@ -17,6 +17,13 @@ type Config struct {
 		LogLevel               int `mapstructure:"log_level"`
 		PasswordHashIterations int `mapstructure:"password_hash_iterations"`
 	}
+
+	PostgreSQL struct {
+		DSN         string `mapstructure:"dsn"`
+		Automigrate bool
+		DB          *common.DBLogger `mapstructure:"db"`
+	} `mapstructure:"postgresql"`
+
 	TdmaServer struct {
 		Bind string
 	} `mapstructure:"tdma_server"`

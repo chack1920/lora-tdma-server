@@ -11,18 +11,14 @@ import (
 
 // when updating this template, don't forget to update config.md!
 const configTemplate = `[general]
-# Log level
-#
-# debug=5, info=4, warning=3, error=2, fatal=1, panic=0
 log_level={{ .General.LogLevel }}
-
-# The number of times passwords must be hashed. A higher number is safer as
-# an attack takes more time to perform.
 password_hash_iterations={{ .General.PasswordHashIterations }}
 
-# Tdma-server configuration.
+[postgresql]
+dsn="{{ .PostgreSQL.DSN }}"
+automigrate={{ .PostgreSQL.Automigrate }}
+
 [tdma_server]
-# ip:port to bind the tdma-server api interface to
 bind="{{ .TdmaServer.Bind }}"
 `
 
