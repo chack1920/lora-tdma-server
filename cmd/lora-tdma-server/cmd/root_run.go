@@ -12,7 +12,7 @@ import (
 	"os/signal"
 	//"strings"
 	"syscall"
-	//"time"
+	"time"
 
 	//assetfs "github.com/elazarl/go-bindata-assetfs"
 	//"github.com/gofrs/uuid"
@@ -45,6 +45,7 @@ import (
 	//"github.com/lioneie/lora-app-server/internal/static"
 	//"github.com/lioneie/lora-app-server/internal/storage"
 	//"github.com/lioneie/loraserver/api/as"
+	"github.com/lioneie/lora-tdma-server/internal/mqttpubsub"
 )
 
 func run(cmd *cobra.Command, args []string) error {
@@ -56,6 +57,7 @@ func run(cmd *cobra.Command, args []string) error {
 		setLogLevel,
 		printStartMessage,
 		startTdmaServerAPI,
+		startMqttHandler,
 	}
 
 	for _, t := range tasks {
@@ -69,7 +71,7 @@ func run(cmd *cobra.Command, args []string) error {
 	signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
 	log.WithField("signal", <-sigChan).Info("signal received")
 	go func() {
-		log.Warning("stopping lora-app-server")
+		log.Warning("stopping lora-tdma-server")
 		// todo: handle graceful shutdown?
 		exitChan <- struct{}{}
 	}()
@@ -109,5 +111,26 @@ func startTdmaServerAPI() error {
 		err := server.ListenAndServe()
 		log.WithError(err).Error("tdma-server api error")
 	}()
+	return nil
+}
+
+func startMqttHandler() error {
+	var pubsub *mqttpubsub.Backend
+	for {
+		var err error
+		pubsub, err = mqttpubsub.NewBackend() //TODO:add config
+		if err == nil {
+			break
+		}
+
+		log.Errorf("could not setup mqtt backend, retry in 2 seconds: %s", err)
+		time.Sleep(2 * time.Second)
+	}
+	//defer pubsub.Close()
+
+	err := pubsub.SubscribeAppTopic()
+	if err != nil {
+		os.Exit(1)
+	}
 	return nil
 }
