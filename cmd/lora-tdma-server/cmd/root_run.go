@@ -41,7 +41,7 @@ import (
 	//"github.com/lioneie/lora-app-server/internal/handler/mqtthandler"
 	//"github.com/lioneie/lora-app-server/internal/handler/multihandler"
 	//"github.com/lioneie/lora-app-server/internal/migrations"
-	//"github.com/lioneie/lora-app-server/internal/nsclient"
+	"github.com/lioneie/lora-tdma-server/internal/asclient"
 	//"github.com/lioneie/lora-app-server/internal/static"
 	"github.com/lioneie/lora-tdma-server/internal/storage"
 	//"github.com/lioneie/loraserver/api/as"
@@ -59,6 +59,7 @@ func run(cmd *cobra.Command, args []string) error {
 		startTdmaServerAPI,
 		startMqttHandler,
 		setPostgreSQLConnection,
+		setAppServerClient,
 	}
 
 	for _, t := range tasks {
@@ -143,5 +144,11 @@ func setPostgreSQLConnection() error {
 		return errors.Wrap(err, "database connection error")
 	}
 	config.C.PostgreSQL.DB = db
+	return nil
+}
+
+func setAppServerClient() error {
+	log.Info("set app server client")
+	config.C.AppServer.Pool = asclient.NewPool()
 	return nil
 }

@@ -8,7 +8,7 @@ import (
 	//"github.com/lioneie/lora-app-server/internal/handler"
 	//"github.com/lioneie/lora-app-server/internal/handler/gcppubsub"
 	//"github.com/lioneie/lora-app-server/internal/handler/mqtthandler"
-	//"github.com/lioneie/lora-app-server/internal/nsclient"
+	"github.com/lioneie/lora-tdma-server/internal/asclient"
 )
 
 // Config defines the configuration structure.
@@ -27,6 +27,10 @@ type Config struct {
 	TdmaServer struct {
 		Bind string
 	} `mapstructure:"tdma_server"`
+
+	AppServer struct {
+		Pool asclient.Pool
+	} `mapstructure:"app_server"`
 }
 
 // C holds the global configuration.
