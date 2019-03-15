@@ -46,6 +46,7 @@ import (
 	"github.com/lioneie/lora-tdma-server/internal/storage"
 	//"github.com/lioneie/loraserver/api/as"
 	"github.com/lioneie/lora-tdma-server/internal/mqttpubsub"
+	"github.com/lioneie/lora-tdma-server/internal/multicast"
 )
 
 func run(cmd *cobra.Command, args []string) error {
@@ -60,6 +61,7 @@ func run(cmd *cobra.Command, args []string) error {
 		startMqttHandler,
 		setPostgreSQLConnection,
 		setAppServerClient,
+		//testMulticastEnqueue,
 	}
 
 	for _, t := range tasks {
@@ -150,5 +152,17 @@ func setPostgreSQLConnection() error {
 func setAppServerClient() error {
 	log.Info("set app server client")
 	config.C.AppServer.Pool = asclient.NewPool()
+	return nil
+}
+
+func testMulticastEnqueue() error {
+	var mcData []byte = []byte{0xa, 0xb, 0xc, 0xd, 0xe}
+	MulticastGroupId := "4a21c7f8-4111-4e46-97c9-2986ca60bac5"
+	fcnt, err := multicast.Enqueue(MulticastGroupId, 5, mcData)
+	if err == nil {
+		log.Info("send multicaset success, fcnt: ", fcnt)
+	} else {
+		log.Error("send multicast err")
+	}
 	return nil
 }
