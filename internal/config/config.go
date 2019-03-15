@@ -1,9 +1,9 @@
 package config
 
 import (
-	//"time"
+	"time"
 
-	//"github.com/gomodule/redigo/redis"
+	"github.com/gomodule/redigo/redis"
 	"github.com/lioneie/lora-tdma-server/internal/common"
 	//"github.com/lioneie/lora-app-server/internal/handler"
 	//"github.com/lioneie/lora-app-server/internal/handler/gcppubsub"
@@ -23,6 +23,13 @@ type Config struct {
 		Automigrate bool
 		DB          *common.DBLogger `mapstructure:"db"`
 	} `mapstructure:"postgresql"`
+
+	Redis struct {
+		URL         string        `mapstructure:"url"`
+		MaxIdle     int           `mapstructure:"max_idle"`
+		IdleTimeout time.Duration `mapstructure:"idle_timeout"`
+		Pool        *redis.Pool
+	}
 
 	TdmaServer struct {
 		Bind string

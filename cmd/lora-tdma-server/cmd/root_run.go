@@ -43,7 +43,7 @@ import (
 	//"github.com/lioneie/lora-app-server/internal/migrations"
 	"github.com/lioneie/lora-tdma-server/internal/asclient"
 	//"github.com/lioneie/lora-app-server/internal/static"
-	"github.com/lioneie/lora-tdma-server/internal/storage"
+	"github.com/lioneie/lora-tdma-server/internal/common"
 	//"github.com/lioneie/loraserver/api/as"
 	"github.com/lioneie/lora-tdma-server/internal/mqttpubsub"
 	"github.com/lioneie/lora-tdma-server/internal/multicast"
@@ -59,6 +59,7 @@ func run(cmd *cobra.Command, args []string) error {
 		printStartMessage,
 		startTdmaServerAPI,
 		startMqttHandler,
+		setRedisPool,
 		setPostgreSQLConnection,
 		setAppServerClient,
 		//testMulticastEnqueue,
@@ -139,9 +140,19 @@ func startMqttHandler() error {
 	return nil
 }
 
+func setRedisPool() error {
+	log.WithField("url", config.C.Redis.URL).Info("setup redis connection pool")
+	config.C.Redis.Pool = common.NewRedisPool(
+		config.C.Redis.URL,
+		config.C.Redis.MaxIdle,
+		config.C.Redis.IdleTimeout,
+	)
+	return nil
+}
+
 func setPostgreSQLConnection() error {
 	log.Info("connecting to postgresql")
-	db, err := storage.OpenDatabase(config.C.PostgreSQL.DSN)
+	db, err := common.OpenDatabase(config.C.PostgreSQL.DSN)
 	if err != nil {
 		return errors.Wrap(err, "database connection error")
 	}

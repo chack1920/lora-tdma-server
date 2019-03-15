@@ -18,6 +18,11 @@ password_hash_iterations={{ .General.PasswordHashIterations }}
 dsn="{{ .PostgreSQL.DSN }}"
 automigrate={{ .PostgreSQL.Automigrate }}
 
+[redis]
+url="{{ .Redis.URL }}"
+max_idle={{ .Redis.MaxIdle }}
+idle_timeout="{{ .Redis.IdleTimeout }}"
+
 [tdma_server]
 bind="{{ .TdmaServer.Bind }}"
 `

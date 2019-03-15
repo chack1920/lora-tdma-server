@@ -3,7 +3,7 @@ package cmd
 import (
 	"bytes"
 	"io/ioutil"
-	//"time"
+	"time"
 
 	"github.com/lioneie/lora-tdma-server/internal/config"
 	"github.com/spf13/viper"
@@ -34,9 +34,15 @@ func init() {
 
 	// defaults
 	viper.SetDefault("general.password_hash_iterations", 100000)
+
 	viper.SetDefault("tdma_server.bind", "0.0.0.0:5555")
+
 	viper.SetDefault("postgresql.dsn", "postgres://loraserver_ts:dbpassword@127.0.0.1/loraserver_ts?sslmode=disable")
 	viper.SetDefault("postgresql.automigrate", true)
+
+	viper.SetDefault("redis.url", "redis://localhost:6379")
+	viper.SetDefault("redis.max_idle", 10)
+	viper.SetDefault("redis.idle_timeout", 5*time.Minute)
 
 	rootCmd.AddCommand(versionCmd)
 	rootCmd.AddCommand(configCmd)
