@@ -25,6 +25,9 @@ idle_timeout="{{ .Redis.IdleTimeout }}"
 
 [tdma_server]
 bind="{{ .TdmaServer.Bind }}"
+
+[app_server]
+bind="{{ .AppServer.Bind }}"
 `
 
 var configCmd = &cobra.Command{

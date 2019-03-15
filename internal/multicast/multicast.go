@@ -15,7 +15,7 @@ import (
 
 // Enqueue adds the given payload to the multicast-group queue.
 func Enqueue(multicastGroupID string, fPort uint32, data []byte) (uint32, error) {
-	hostname := "localhost:8080" //TODO: add to config
+	hostname := config.C.AppServer.Bind
 	c, err := config.C.AppServer.Pool.GetMulticastGroupServiceClient(hostname)
 	if err != nil {
 		return 0, errors.Wrap(err, "get multicast client error")

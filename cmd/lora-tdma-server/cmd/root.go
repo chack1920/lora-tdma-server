@@ -44,6 +44,8 @@ func init() {
 	viper.SetDefault("redis.max_idle", 10)
 	viper.SetDefault("redis.idle_timeout", 5*time.Minute)
 
+	viper.SetDefault("app_server.bind", "localhost:8080")
+
 	rootCmd.AddCommand(versionCmd)
 	rootCmd.AddCommand(configCmd)
 }

@@ -36,6 +36,7 @@ type Config struct {
 	} `mapstructure:"tdma_server"`
 
 	AppServer struct {
+		Bind string `mapstructure:"bind"`
 		Pool asclient.Pool
 	} `mapstructure:"app_server"`
 }

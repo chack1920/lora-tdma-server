@@ -222,7 +222,7 @@ func testRedis() error {
 }
 
 func testExample() error {
-	//return testMulticastEnqueue()
+	return testMulticastEnqueue()
 	//return testPostgreSQL
-	return testRedis()
+	//return testRedis()
 }
