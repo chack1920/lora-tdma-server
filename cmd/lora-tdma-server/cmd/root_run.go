@@ -4,7 +4,7 @@ import (
 	"context"
 	//"crypto/tls"
 	//"crypto/x509"
-	//"fmt"
+	"fmt"
 	//"io/ioutil"
 	//"net"
 	"net/http"
@@ -45,6 +45,7 @@ import (
 	//"github.com/lioneie/lora-app-server/internal/static"
 	"github.com/lioneie/lora-tdma-server/internal/common"
 	//"github.com/lioneie/loraserver/api/as"
+	"github.com/gomodule/redigo/redis"
 	"github.com/jmoiron/sqlx"
 	"github.com/lioneie/lora-tdma-server/internal/mqttpubsub"
 	"github.com/lioneie/lora-tdma-server/internal/multicast"
@@ -64,8 +65,7 @@ func run(cmd *cobra.Command, args []string) error {
 		setRedisPool,
 		setPostgreSQLConnection,
 		setAppServerClient,
-		//testMulticastEnqueue,
-		testPostgreSQL,
+		testExample,
 	}
 
 	for _, t := range tasks {
@@ -196,4 +196,33 @@ func sqlxExt(db sqlx.Ext, qi storage.TestItem) error {
 		return errors.Wrap(err, "create test-item error")
 	}
 	return nil
+}
+
+func testRedis() error {
+	var val []byte
+	var err error
+
+	p := config.C.Redis.Pool
+	c := p.Get()
+	key := "key1"
+	exp := 30 * 1000
+
+	val, err = redis.Bytes(c.Do("GET", key))
+	fmt.Println("before set:", val, err)
+
+	val = []byte{5, 6, 7}
+	_, err = c.Do("PSETEX", key, exp, val)
+	if err != nil {
+		return errors.Wrap(err, "set redis error")
+	}
+
+	val, err = redis.Bytes(c.Do("GET", key))
+	fmt.Println("after set:", val, err)
+	return nil
+}
+
+func testExample() error {
+	//return testMulticastEnqueue()
+	//return testPostgreSQL
+	return testRedis()
 }
