@@ -45,8 +45,10 @@ import (
 	//"github.com/lioneie/lora-app-server/internal/static"
 	"github.com/lioneie/lora-tdma-server/internal/common"
 	//"github.com/lioneie/loraserver/api/as"
+	"github.com/jmoiron/sqlx"
 	"github.com/lioneie/lora-tdma-server/internal/mqttpubsub"
 	"github.com/lioneie/lora-tdma-server/internal/multicast"
+	"github.com/lioneie/lora-tdma-server/internal/storage"
 )
 
 func run(cmd *cobra.Command, args []string) error {
@@ -63,6 +65,7 @@ func run(cmd *cobra.Command, args []string) error {
 		setPostgreSQLConnection,
 		setAppServerClient,
 		//testMulticastEnqueue,
+		testPostgreSQL,
 	}
 
 	for _, t := range tasks {
@@ -174,6 +177,23 @@ func testMulticastEnqueue() error {
 		log.Info("send multicaset success, fcnt: ", fcnt)
 	} else {
 		log.Error("send multicast err")
+	}
+	return nil
+}
+
+func testPostgreSQL() error {
+	qi := storage.TestItem{
+		FCnt: 1,
+	}
+	err := storage.Transaction(config.C.PostgreSQL.DB, func(tx sqlx.Ext) error {
+		return sqlxExt(tx, qi)
+	})
+	return err
+}
+
+func sqlxExt(db sqlx.Ext, qi storage.TestItem) error {
+	if err := storage.CreateTestItem(db, &qi); err != nil {
+		return errors.Wrap(err, "create test-item error")
 	}
 	return nil
 }
