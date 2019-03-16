@@ -21,7 +21,7 @@ import (
 	//"github.com/grpc-ecosystem/go-grpc-middleware/tags"
 	//"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/pkg/errors"
-	//migrate "github.com/rubenv/sql-migrate"
+	migrate "github.com/rubenv/sql-migrate"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	//"github.com/tmc/grpc-websocket-proxy/wsproxy"
@@ -39,8 +39,8 @@ import (
 	//"github.com/lioneie/lora-app-server/internal/handler/gcppubsub"
 	//"github.com/lioneie/lora-app-server/internal/handler/mqtthandler"
 	//"github.com/lioneie/lora-app-server/internal/handler/multihandler"
-	//"github.com/lioneie/lora-app-server/internal/migrations"
 	"github.com/lioneie/lora-tdma-server/internal/asclient"
+	"github.com/lioneie/lora-tdma-server/internal/migrations"
 	"github.com/lioneie/lora-tdma-server/internal/mqttpubsub"
 	//"github.com/lioneie/lora-app-server/internal/static"
 	"github.com/lioneie/lora-tdma-server/internal/common"
@@ -60,7 +60,8 @@ func run(cmd *cobra.Command, args []string) error {
 		setRedisPool,
 		setPostgreSQLConnection,
 		setAppServerClient,
-		TestExample,
+		runDatabaseMigrations,
+		//TestExample,
 	}
 
 	for _, t := range tasks {
@@ -161,5 +162,22 @@ func setPostgreSQLConnection() error {
 func setAppServerClient() error {
 	log.Info("set app server client")
 	config.C.AppServer.Pool = asclient.NewPool()
+	return nil
+}
+
+func runDatabaseMigrations() error {
+	if config.C.PostgreSQL.Automigrate {
+		log.Info("applying database migrations")
+		m := &migrate.AssetMigrationSource{
+			Asset:    migrations.Asset,
+			AssetDir: migrations.AssetDir,
+			Dir:      "",
+		}
+		n, err := migrate.Exec(config.C.PostgreSQL.DB.DB.DB, "postgres", m, migrate.Up)
+		if err != nil {
+			return errors.Wrap(err, "applying migrations failed")
+		}
+		log.WithField("count", n).Info("migrations applied")
+	}
 	return nil
 }

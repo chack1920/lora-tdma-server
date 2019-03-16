@@ -2,45 +2,12 @@
 
 
 [[projects]]
-  digest = "1:5e7b4e7813054484d9564fedab68f5b111542ae870528fdeed536ee92e503912"
-  name = "cloud.google.com/go"
-  packages = [
-    "compute/metadata",
-    "iam",
-    "internal/optional",
-    "internal/version",
-    "pubsub",
-    "pubsub/apiv1",
-    "pubsub/internal/distribution",
-  ]
-  pruneopts = "NUT"
-  revision = "aad3f485ee528456e0768f20397b4d9dd941e755"
-  version = "v0.25.0"
-
-[[projects]]
-  digest = "1:dcd5b52f07909627cb0946536b99d7fc1073347b62bc9546439b939a3167342b"
-  name = "github.com/brocaar/lora-app-server"
-  packages = [
-    "internal/codec",
-    "internal/common",
-    "internal/config",
-    "internal/handler",
-    "internal/handler/gcppubsub",
-    "internal/handler/mqtthandler",
-    "internal/nsclient",
-  ]
-  pruneopts = "NUT"
-  revision = "f43a733cd93c32d99343fc0dd3ff641064b05145"
-  version = "v2.4.1"
-
-[[projects]]
   branch = "master"
-  digest = "1:aba8e2a4edb5f8c31d92515a797715e36b0890f601b3e4a2c3b72c56eaa44740"
+  digest = "1:ff97006129e3270f53e0c2de4501f01c525527ee7be546dafae778f410438547"
   name = "github.com/brocaar/loraserver"
   packages = [
     "api/common",
     "api/gw",
-    "api/ns",
   ]
   pruneopts = "NUT"
   revision = "e81f0d13cda8693ffd4d3a7fe1080fdec1de1f9e"
@@ -55,14 +22,6 @@
   ]
   pruneopts = "NUT"
   revision = "531a8de585bff4a339611577ce980019a51354a5"
-
-[[projects]]
-  digest = "1:7a6852b35eb5bbc184561443762d225116ae630c26a7c4d90546619f1e7d2ad2"
-  name = "github.com/dgrijalva/jwt-go"
-  packages = ["."]
-  pruneopts = "NUT"
-  revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"
-  version = "v3.2.0"
 
 [[projects]]
   branch = "master"
@@ -82,14 +41,6 @@
   pruneopts = "NUT"
   revision = "c2828203cd70a50dcccfb2761f8b1f8ceef9a8e9"
   version = "v1.4.7"
-
-[[projects]]
-  branch = "master"
-  digest = "1:bde9f189072512ba353f3641d4839cb4c9c7edf421e467f2c03f267b402bd16c"
-  name = "github.com/gofrs/uuid"
-  packages = ["."]
-  pruneopts = "NUT"
-  revision = "e684523faa0581e44663968f097d478c499d4276"
 
 [[projects]]
   digest = "1:f7c90cef96e0622c16b4b5f3d54b2ec51dbd0f7aa60328c981d76f5a2e624ce8"
@@ -121,17 +72,6 @@
   version = "v2.0.0"
 
 [[projects]]
-  digest = "1:fd4d1f4c2d75aee3833ee7d8ef11fcf42ddec3c63d1819548288c3d868d6eb14"
-  name = "github.com/googleapis/gax-go"
-  packages = [
-    ".",
-    "v2",
-  ]
-  pruneopts = "NUT"
-  revision = "c8a15bac9b9fe955bd9f900272f9a306465d28cf"
-  version = "v2.0.3"
-
-[[projects]]
   branch = "master"
   digest = "1:c8b63799f82dc9e0ec566193a5473f1227c01ee6a0a10d5d1c1b7941d3999bae"
   name = "github.com/grpc-ecosystem/go-grpc-middleware"
@@ -157,14 +97,6 @@
   pruneopts = "NUT"
   revision = "8558711daa6c2853489043207b563dceacbc19cf"
   version = "v1.5.0"
-
-[[projects]]
-  digest = "1:67474f760e9ac3799f740db2c489e6423a4cde45520673ec123ac831ad849cb8"
-  name = "github.com/hashicorp/golang-lru"
-  packages = ["simplelru"]
-  pruneopts = "NUT"
-  revision = "7087cb70de9f7a8bc0a10c375cb0d2280a8edf9c"
-  version = "v0.5.1"
 
 [[projects]]
   digest = "1:11c6c696067d3127ecf332b10f89394d386d9083f82baf71f40f2da31841a009"
@@ -227,37 +159,20 @@
   revision = "4ded0e9383f75c197b3a2aaa6d590ac52df6fd79"
 
 [[projects]]
-  digest = "1:6573d68ddca3f8692e5a142990b03e227bdf75e8f21ab0720f3a7455de5d3b4b"
+  digest = "1:e7032b13ee63b8f3568367f40860b35b8c71e6693bd70a1b965689c905e76db2"
   name = "github.com/lioneie/lora-app-server"
-  packages = [
-    "api",
-    "internal/config",
-    "internal/storage",
-  ]
+  packages = ["api"]
   pruneopts = "NUT"
   revision = "f43a733cd93c32d99343fc0dd3ff641064b05145"
   version = "v2.4.1"
 
 [[projects]]
-  branch = "lioneie_v2.4.1"
-  digest = "1:c1a3f3ed926ed2da7b91a71c94a0a10762453d6a64d6d2c6fc496e8edb121980"
-  name = "github.com/lioneie/loraserver"
-  packages = [
-    "api/common",
-    "api/gw",
-    "api/ns",
-  ]
-  pruneopts = "UT"
-  revision = "8702710c592052ab4815e36c1406b119c96a41db"
-
-[[projects]]
   branch = "lioneie"
-  digest = "1:6863236203aaddc75f68208037ffc0f76b4d4b98ea9f885fc0a764179ca39472"
+  digest = "1:8d56a2e1d180d7240cf1b1960adf89fcd3e115cb9f6f0b18aaa32bf6abfb0d72"
   name = "github.com/lioneie/lorawan"
   packages = [
     ".",
     "backend",
-    "band",
   ]
   pruneopts = "NUT"
   revision = "d486c0cd55f00e6f6c2578db08d307bc5a797b91"
@@ -296,19 +211,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:122fdd61e136e89e520052921d535753b34853224de4f4d1482a3578d4fdb541"
-  name = "github.com/robertkrimen/otto"
+  digest = "1:6c9ffc8e817fe638d8169ceadc7bb32b12973ff953c2e686d4ac2a487024a6b2"
+  name = "github.com/rubenv/sql-migrate"
   packages = [
     ".",
-    "ast",
-    "dbg",
-    "file",
-    "parser",
-    "registry",
-    "token",
+    "sqlparse",
   ]
   pruneopts = "NUT"
-  revision = "15f95af6e78dcd2030d8195a138bd88d4f403546"
+  revision = "1007f53448d75fe14190968f5de4d95ed63ebb83"
 
 [[projects]]
   digest = "1:b2339e83ce9b5c4f79405f949429a7f68a9a904fed903c672aac1e7ceb7f5f02"
@@ -370,47 +280,19 @@
   revision = "3171ef9a229903ce60a9513ec3899b63c003e91c"
 
 [[projects]]
-  digest = "1:bad3b5113fd57bcf4549cc7d15283cc8b64cccef6f5044fc1246ee4ab88b18a1"
-  name = "go.opencensus.io"
-  packages = [
-    ".",
-    "exemplar",
-    "internal",
-    "internal/tagencoding",
-    "plugin/ocgrpc",
-    "plugin/ochttp",
-    "plugin/ochttp/propagation/b3",
-    "stats",
-    "stats/internal",
-    "stats/view",
-    "tag",
-    "trace",
-    "trace/internal",
-    "trace/propagation",
-    "trace/tracestate",
-  ]
-  pruneopts = "NUT"
-  revision = "f305e5c4e2cf345eba88de13d10de1126fa45a61"
-  version = "v0.19.1"
-
-[[projects]]
   branch = "master"
-  digest = "1:cb77e5934866333fa0784326a57e64c4da128001c94fbd1d29819d79bd3b1087"
+  digest = "1:3f3a05ae0b95893d90b9b3b5afdb79a9b3d96e4e36e099d841ae602e4aca0da8"
   name = "golang.org/x/crypto"
-  packages = [
-    "pbkdf2",
-    "ssh/terminal",
-  ]
+  packages = ["ssh/terminal"]
   pruneopts = "NUT"
   revision = "0e37d006457bf46f9e6692014ba72ef82c33022c"
 
 [[projects]]
   branch = "master"
-  digest = "1:0027631ec368a2051185ee22c223afb80cea355003605697917d46d06bbe76db"
+  digest = "1:1a60125f664cd0722281a982540e2465729df2f69a3a1d64713c9edbfcb66807"
   name = "golang.org/x/net"
   packages = [
     "context",
-    "context/ctxhttp",
     "http/httpguts",
     "http2",
     "http2/hpack",
@@ -423,31 +305,6 @@
   ]
   pruneopts = "NUT"
   revision = "49bb7cea24b1df9410e1712aa6433dae904ff66a"
-
-[[projects]]
-  branch = "master"
-  digest = "1:17ee74a4d9b6078611784b873cdbfe91892d2c73052c430724e66fcc015b6c7b"
-  name = "golang.org/x/oauth2"
-  packages = [
-    ".",
-    "google",
-    "internal",
-    "jws",
-    "jwt",
-  ]
-  pruneopts = "NUT"
-  revision = "e64efc72b421e893cbf63f17ba2221e7d6d0b0f3"
-
-[[projects]]
-  branch = "master"
-  digest = "1:04a5b0e4138f98eef79ce12a955a420ee358e9f787044cc3a553ac3c3ade997e"
-  name = "golang.org/x/sync"
-  packages = [
-    "errgroup",
-    "semaphore",
-  ]
-  pruneopts = "NUT"
-  revision = "e225da77a7e68af35c70ccbf71af2b83e6acac3c"
 
 [[projects]]
   branch = "master"
@@ -484,60 +341,18 @@
   version = "v0.3.0"
 
 [[projects]]
-  digest = "1:f287c9d58e1a591510d69f14e2cebce953e003e0acdcca900bf2d7bc5627c06a"
-  name = "google.golang.org/api"
-  packages = [
-    "googleapi/transport",
-    "internal",
-    "iterator",
-    "option",
-    "support/bundler",
-    "transport",
-    "transport/grpc",
-    "transport/http",
-    "transport/http/internal/propagation",
-  ]
-  pruneopts = "NUT"
-  revision = "e742f5a8defa1f9f5d723dfa04c962e680dc33f0"
-  version = "v0.2.0"
-
-[[projects]]
-  digest = "1:898bf528e5c601c4a1111586f75ab9515467ebe7a41ae849d5a839720d4e2580"
-  name = "google.golang.org/appengine"
-  packages = [
-    ".",
-    "internal",
-    "internal/app_identity",
-    "internal/base",
-    "internal/datastore",
-    "internal/log",
-    "internal/modules",
-    "internal/remote_api",
-    "internal/socket",
-    "internal/urlfetch",
-    "socket",
-    "urlfetch",
-  ]
-  pruneopts = "NUT"
-  revision = "e9657d882bb81064595ca3b56cbe2546bbabf7b1"
-  version = "v1.4.0"
-
-[[projects]]
   branch = "master"
-  digest = "1:b45710cc2acef037e49197b9a41697375927bbe5986240f0194a33ef556d24cd"
+  digest = "1:42448f154e7d40907ae03cbdf99dbcfa3feb927c4521e0f01c52c6142e4891d5"
   name = "google.golang.org/genproto"
   packages = [
     "googleapis/api/annotations",
-    "googleapis/iam/v1",
-    "googleapis/pubsub/v1",
     "googleapis/rpc/status",
-    "protobuf/field_mask",
   ]
   pruneopts = "NUT"
   revision = "4b56f30a1fd96a133a036b62cdd2a249883dd89b"
 
 [[projects]]
-  digest = "1:83db4286030add91301b4fd9cc3b06497683691223937b47510a741559bc07ef"
+  digest = "1:5b805b8e03b29399b344655cac16873f026e54dc0a7c17b381f6f4d4c7b6d741"
   name = "google.golang.org/grpc"
   packages = [
     ".",
@@ -547,7 +362,6 @@
     "codes",
     "connectivity",
     "credentials",
-    "credentials/oauth",
     "encoding",
     "encoding/proto",
     "grpclog",
@@ -573,15 +387,12 @@
   version = "v1.15.0"
 
 [[projects]]
-  digest = "1:f3afbc73d5c6c35c71e6b763529db20270a71e028712b76e0f86c233eba3cd2f"
-  name = "gopkg.in/sourcemap.v1"
-  packages = [
-    ".",
-    "base64vlq",
-  ]
+  digest = "1:1bfe1fa433123b451bb1a2a1a5d094322821b9463f5bf8eade67e71d7532e3d0"
+  name = "gopkg.in/gorp.v1"
+  packages = ["."]
   pruneopts = "NUT"
-  revision = "6e83acea0053641eff084973fee085f0c193c61a"
-  version = "v1.0.5"
+  revision = "6a667da9c028871f98598d85413e3fc4c6daa52e"
+  version = "v1.7.2"
 
 [[projects]]
   digest = "1:7c95b35057a0ff2e19f707173cc1a947fa43a6eb5c4d300d196ece0334046082"
@@ -596,22 +407,19 @@
   analyzer-version = 1
   input-imports = [
     "github.com/eclipse/paho.mqtt.golang",
-    "github.com/gofrs/uuid",
+    "github.com/gomodule/redigo/redis",
     "github.com/grpc-ecosystem/go-grpc-middleware/logging/logrus",
     "github.com/jmoiron/sqlx",
     "github.com/lib/pq",
     "github.com/lioneie/lora-app-server/api",
-    "github.com/lioneie/lora-app-server/internal/config",
-    "github.com/lioneie/lora-app-server/internal/storage",
-    "github.com/lioneie/loraserver/api/ns",
     "github.com/lioneie/lorawan",
     "github.com/lioneie/lorawan/backend",
     "github.com/pkg/errors",
+    "github.com/rubenv/sql-migrate",
     "github.com/sirupsen/logrus",
     "github.com/spf13/cobra",
     "github.com/spf13/viper",
     "google.golang.org/grpc",
-    "google.golang.org/grpc/credentials",
     "google.golang.org/grpc/grpclog",
     "google.golang.org/grpc/metadata",
   ]
