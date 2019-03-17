@@ -20,7 +20,8 @@ func TestExample() error {
 	//return testRedis()
 	//return testTdmaJoin()
 	//return testTdmaJoinCache()
-	return testTdmaSessionCache()
+	//return testTdmaSessionCache()
+	return testRedisKeys()
 }
 
 func testMulticastEnqueue() error {
@@ -109,4 +110,22 @@ func testTdmaSessionCache() error {
 	item, err := storage.GetTdmaSessionItemCache(config.C.Redis.Pool, dev_eui)
 	fmt.Println("testTdmaSessionCache:", item, err)
 	return err
+}
+
+func testRedisKeys() error {
+	var err error
+	var res []string
+
+	p := config.C.Redis.Pool
+	c := p.Get()
+	key := "lora:ns*"
+
+	res, err = redis.Strings(c.Do("KEYS", key))
+	if err != nil {
+		return err
+	}
+	for i, k := range res {
+		fmt.Printf("%d, %s\n", i, k)
+	}
+	return nil
 }
