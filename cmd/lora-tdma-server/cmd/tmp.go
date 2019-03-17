@@ -7,14 +7,17 @@ import (
 	"github.com/lioneie/lora-tdma-server/internal/config"
 	"github.com/lioneie/lora-tdma-server/internal/multicast"
 	"github.com/lioneie/lora-tdma-server/internal/storage"
+	"github.com/lioneie/lora-tdma-server/internal/tdma_join"
+	"github.com/lioneie/lorawan"
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 )
 
 func TestExample() error {
-	return testMulticastEnqueue()
-	//return testPostgreSQL
+	//return testMulticastEnqueue()
+	//return testPostgreSQL()
 	//return testRedis()
+	return testTdmaJoin()
 }
 
 func testMulticastEnqueue() error {
@@ -30,8 +33,10 @@ func testMulticastEnqueue() error {
 }
 
 func testPostgreSQL() error {
-	qi := storage.TestItem{
-		FCnt: 1,
+	qi := storage.TdmaJoinItem{
+		DevEUI:  [8]byte{0, 1, 2, 3, 4, 5, 6, 7},
+		McSeq:   255,
+		TxCycle: 555,
 	}
 	err := storage.Transaction(config.C.PostgreSQL.DB, func(tx sqlx.Ext) error {
 		return sqlxExt(tx, qi)
@@ -39,8 +44,8 @@ func testPostgreSQL() error {
 	return err
 }
 
-func sqlxExt(db sqlx.Ext, qi storage.TestItem) error {
-	if err := storage.CreateTestItem(db, &qi); err != nil {
+func sqlxExt(db sqlx.Ext, qi storage.TdmaJoinItem) error {
+	if err := storage.CreateTdmaJoinItem(db, &qi); err != nil {
 		return errors.Wrap(err, "create test-item error")
 	}
 	return nil
@@ -66,5 +71,16 @@ func testRedis() error {
 
 	val, err = redis.Bytes(c.Do("GET", key))
 	fmt.Println("after set:", val, err)
+	return nil
+}
+
+func testTdmaJoin() error {
+	req := lorawan.TdmaReqPayload{
+		DevEUI:  [8]byte{1, 2, 3, 4, 5, 6, 7, 8},
+		DevAddr: [4]byte{1, 2, 3, 4},
+		TxCycle: 5000,
+	}
+	ans := tdma_join.HandleTdmaJoinRequest(req)
+	fmt.Println(ans)
 	return nil
 }
