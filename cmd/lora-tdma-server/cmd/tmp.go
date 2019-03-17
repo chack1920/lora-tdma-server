@@ -11,6 +11,7 @@ import (
 	"github.com/lioneie/lorawan"
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
+	"time"
 )
 
 func TestExample() error {
@@ -18,7 +19,8 @@ func TestExample() error {
 	//return testPostgreSQL()
 	//return testRedis()
 	//return testTdmaJoin()
-	return testTdmaJoinCache()
+	//return testTdmaJoinCache()
+	return testTdmaSessionCache()
 }
 
 func testMulticastEnqueue() error {
@@ -94,5 +96,17 @@ func testTdmaJoinCache() error {
 		fmt.Println("testTdmaJoinCache:", item, err)
 		return err
 	})
+	return err
+}
+
+func testTdmaSessionCache() error {
+	dev_eui := [8]byte{0, 0, 0, 0, 0, 0, 0, 0x20}
+	tmp := storage.TdmaSessionItem{
+		Time:   time.Now(),
+		DevEUI: dev_eui,
+	}
+	_ = storage.CreateTdmaSessionItemCache(config.C.Redis.Pool, tmp)
+	item, err := storage.GetTdmaSessionItemCache(config.C.Redis.Pool, dev_eui)
+	fmt.Println("testTdmaSessionCache:", item, err)
 	return err
 }

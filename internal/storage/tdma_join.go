@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	TdmaJoinItemKeyTempl = "lora:ts:tj:%v"
+	TdmaJoinItemKeyTempl = "lora:ts:tdma:join:%v"
 )
 
 type TdmaJoinItem struct {
