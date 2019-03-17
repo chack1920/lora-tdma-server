@@ -61,7 +61,7 @@ func run(cmd *cobra.Command, args []string) error {
 		setPostgreSQLConnection,
 		setAppServerClient,
 		runDatabaseMigrations,
-		//TestExample,
+		TestExample,
 	}
 
 	for _, t := range tasks {

@@ -1,13 +1,21 @@
 package storage
 
 import (
+	"bytes"
+	"encoding/gob"
+	"fmt"
 	"time"
 
 	//"github.com/gofrs/uuid"
+	"github.com/gomodule/redigo/redis"
 	"github.com/jmoiron/sqlx"
-	//"github.com/pkg/errors"
 	"github.com/lioneie/lorawan"
+	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
+)
+
+const (
+	TdmaJoinItemKeyTempl = "lora:ts:tj:%v"
 )
 
 type TdmaJoinItem struct {
@@ -18,7 +26,6 @@ type TdmaJoinItem struct {
 	TxCycle   uint32        `db:"tx_cycle"`
 }
 
-// CreateMulticastQueueItem adds the given item to the queue.
 func CreateTdmaJoinItem(db sqlx.Queryer, item *TdmaJoinItem) error {
 	item.CreatedAt = time.Now()
 
@@ -129,4 +136,86 @@ func GetTdmaJoinItemCounter(db sqlx.Queryer) (int64, error) {
 		return ret, handlePSQLError(err, "select error")
 	}
 	return ret, nil
+}
+
+func GetTdmaJoinItemCache(p *redis.Pool, devEUI lorawan.EUI64) (TdmaJoinItem, error) {
+	var dp TdmaJoinItem
+	key := fmt.Sprintf(TdmaJoinItemKeyTempl, devEUI)
+
+	c := p.Get()
+	defer c.Close()
+
+	val, err := redis.Bytes(c.Do("GET", key))
+	if err != nil {
+		if err == redis.ErrNil {
+			return dp, ErrDoesNotExist
+		}
+		return dp, errors.Wrap(err, "get error")
+	}
+
+	err = gob.NewDecoder(bytes.NewReader(val)).Decode(&dp)
+	if err != nil {
+		return dp, errors.Wrap(err, "gob decode error")
+	}
+
+	return dp, nil
+}
+
+func CreateTdmaJoinItemCache(p *redis.Pool, dp TdmaJoinItem) error {
+	var buf bytes.Buffer
+	if err := gob.NewEncoder(&buf).Encode(dp); err != nil {
+		return errors.Wrap(err, "gob encode tdma join item error")
+	}
+
+	c := p.Get()
+	defer c.Close()
+
+	key := fmt.Sprintf(TdmaJoinItemKeyTempl, dp.DevEUI)
+
+	_, err := c.Do("SET", key, buf.Bytes())
+	if err != nil {
+		return errors.Wrap(err, "set tdma join error")
+	}
+
+	return nil
+}
+
+func FlushTdmaJoinItemCache(p *redis.Pool, devEUI lorawan.EUI64) error {
+	key := fmt.Sprintf(TdmaJoinItemKeyTempl, devEUI)
+	c := p.Get()
+	defer c.Close()
+
+	_, err := c.Do("DEL", key)
+	if err != nil {
+		return errors.Wrap(err, "delete error")
+	}
+	return nil
+}
+
+func GetAndCacheTdmaJoinItem(db sqlx.Queryer, p *redis.Pool, devEUI lorawan.EUI64) (TdmaJoinItem, error) {
+	dp, err := GetTdmaJoinItemCache(p, devEUI)
+	if err == nil {
+		return dp, nil
+	}
+
+	if err != ErrDoesNotExist {
+		log.WithFields(log.Fields{
+			"dev_eui": devEUI,
+		}).WithError(err).Error("get tdma join item cache error")
+		// we don't return as we can still fall-back onto db retrieval
+	}
+
+	dp, err = GetTdmaJoinItem(db, devEUI)
+	if err != nil {
+		return TdmaJoinItem{}, errors.Wrap(err, "get tdma join error")
+	}
+
+	err = CreateTdmaJoinItemCache(p, dp)
+	if err != nil {
+		log.WithFields(log.Fields{
+			"dev_eui": devEUI,
+		}).WithError(err).Error("create tdma join item cache error")
+	}
+
+	return dp, nil
 }

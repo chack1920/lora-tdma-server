@@ -35,6 +35,7 @@ func HandleTdmaJoinRequest(pl lorawan.TdmaReqPayload) lorawan.TdmaAnsPayload {
 		"dev_eui": ans.DevEUI,
 		"mc_seq":  ans.McSeq,
 	}).Info("tdma join answer")
+	_ = storage.FlushTdmaJoinItemCache(config.C.Redis.Pool, pl.DevEUI)
 	return ans
 }
 
@@ -52,6 +53,7 @@ func updateTdmaJoinItem(pl lorawan.TdmaReqPayload) (uint8, error) {
 		return nil
 
 	})
+
 	return mcSeq, err
 }
 

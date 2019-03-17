@@ -17,7 +17,8 @@ func TestExample() error {
 	//return testMulticastEnqueue()
 	//return testPostgreSQL()
 	//return testRedis()
-	return testTdmaJoin()
+	//return testTdmaJoin()
+	return testTdmaJoinCache()
 }
 
 func testMulticastEnqueue() error {
@@ -83,4 +84,15 @@ func testTdmaJoin() error {
 	ans := tdma_join.HandleTdmaJoinRequest(req)
 	fmt.Println(ans)
 	return nil
+}
+
+func testTdmaJoinCache() error {
+	dev_eui := [8]byte{0, 0, 0, 0, 0, 0, 0, 0x20}
+	_ = storage.FlushTdmaJoinItemCache(config.C.Redis.Pool, dev_eui)
+	err := storage.Transaction(config.C.PostgreSQL.DB, func(tx sqlx.Ext) error {
+		item, err := storage.GetAndCacheTdmaJoinItem(tx, config.C.Redis.Pool, dev_eui)
+		fmt.Println("testTdmaJoinCache:", item, err)
+		return err
+	})
+	return err
 }
