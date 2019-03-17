@@ -20,8 +20,8 @@ func TestExample() error {
 	//return testRedis()
 	//return testTdmaJoin()
 	//return testTdmaJoinCache()
-	//return testTdmaSessionCache()
-	return testRedisKeys()
+	return testTdmaSessionCache()
+	//return testRedisKeys()
 }
 
 func testMulticastEnqueue() error {

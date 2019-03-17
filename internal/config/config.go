@@ -32,7 +32,10 @@ type Config struct {
 	}
 
 	TdmaServer struct {
-		Bind string
+		Bind      string
+		Scheduler struct {
+			SchedulerInterval time.Duration `mapstructure:"scheduler_interval"`
+		} `mapstructure:"scheduler"`
 	} `mapstructure:"tdma_server"`
 
 	AppServer struct {

@@ -75,3 +75,33 @@ func FlushTdmaSessionItemCache(p *redis.Pool, devEUI lorawan.EUI64) error {
 	}
 	return nil
 }
+
+func GetSchedulableTdmaSessionItems(p *redis.Pool) ([]TdmaSessionItem, error) {
+	var ret []TdmaSessionItem = make([]TdmaSessionItem, 0)
+	var err error
+	var allKeys []string
+	var dp TdmaSessionItem
+	var val []byte
+
+	c := p.Get()
+	defer c.Close()
+
+	var str string = fmt.Sprintf(TdmaSessionKeyTempl, "*")
+	allKeys, err = redis.Strings(c.Do("KEYS", str))
+	for _, key := range allKeys {
+		val, err = redis.Bytes(c.Do("GET", key))
+		if err != nil {
+			continue
+		}
+
+		err = gob.NewDecoder(bytes.NewReader(val)).Decode(&dp)
+		if err != nil {
+			continue
+		}
+
+		if time.Now().Sub(dp.Time) > 0 {
+			ret = append(ret, dp)
+		}
+	}
+	return ret, nil
+}

@@ -25,6 +25,8 @@ idle_timeout="{{ .Redis.IdleTimeout }}"
 
 [tdma_server]
 bind="{{ .TdmaServer.Bind }}"
+  [network_server.scheduler]
+  scheduler_interval="{{ .TdmaServer.Scheduler.SchedulerInterval }}"
 
 [app_server]
 bind="{{ .AppServer.Bind }}"

@@ -33,7 +33,7 @@ import (
 	"github.com/lioneie/lora-tdma-server/internal/api"
 	//"github.com/lioneie/lora-app-server/internal/api/auth"
 	"github.com/lioneie/lora-tdma-server/internal/config"
-	//"github.com/lioneie/lora-app-server/internal/downlink"
+	"github.com/lioneie/lora-tdma-server/internal/tdma_session"
 	//"github.com/lioneie/lora-app-server/internal/gwping"
 	//"github.com/lioneie/lora-app-server/internal/handler"
 	//"github.com/lioneie/lora-app-server/internal/handler/gcppubsub"
@@ -61,7 +61,9 @@ func run(cmd *cobra.Command, args []string) error {
 		setPostgreSQLConnection,
 		setAppServerClient,
 		runDatabaseMigrations,
-		TestExample,
+		TestExample, //TODO:will remove, set tdma session cache here
+		startTdmaScheduler,
+		//TestExample,
 	}
 
 	for _, t := range tasks {
@@ -179,5 +181,12 @@ func runDatabaseMigrations() error {
 		}
 		log.WithField("count", n).Info("migrations applied")
 	}
+	return nil
+}
+
+func startTdmaScheduler() error {
+	log.Info("starting tdma scheduler")
+	go tdma_session.TdmaSessionSchedulerLoop()
+
 	return nil
 }
