@@ -9,11 +9,14 @@ import (
 	"sync"
 	//"text/template"
 	//"os"
+	"regexp"
+	"strconv"
 	"time"
 
 	"github.com/eclipse/paho.mqtt.golang"
-	//newMQTT "github.com/lioneie/lora-gateway-bridge/internal/backend/mqtt"
-	//"github.com/lioneie/loraserver/api/gw"
+	"github.com/lioneie/lora-tdma-server/internal/common"
+	"github.com/lioneie/lora-tdma-server/internal/config"
+	"github.com/lioneie/lora-tdma-server/internal/storage"
 	//"github.com/lioneie/lorawan"
 	//"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
@@ -76,6 +79,36 @@ func (b *Backend) SubscribeAppTopic() error {
 
 func (b *Backend) appPacketHandler(c mqtt.Client, msg mqtt.Message) {
 	log.WithField("topic", msg.Topic()).Info("backend: app packet received")
+
+	if match, _ := regexp.Match("application/.*/device/.*/rx", []byte(msg.Topic())); match == true {
+		handleTdmaSession(msg)
+	}
+}
+
+func handleTdmaSession(msg mqtt.Message) {
+	var err error
+	var devEUI64 int64
+
+	devEUIStr := common.GetMiddleString(msg.Topic(), "device/", "/rx")
+	devEUI64, err = strconv.ParseInt(devEUIStr, 16, 64)
+	if err != nil {
+		return
+	}
+
+	var devEUI [8]byte
+	for i := 0; i < 8; i++ {
+		devEUI[i] = byte(devEUI64>>uint8((7-i)*8)) & 0xff
+	}
+
+	_, err = storage.GetTdmaSessionItemCache(config.C.Redis.Pool, devEUI)
+	if err == storage.ErrDoesNotExist {
+		tmp := storage.TdmaSessionItem{
+			Time:   time.Now(),
+			DevEUI: devEUI,
+		}
+		_ = storage.CreateTdmaSessionItemCache(config.C.Redis.Pool, tmp)
+
+	}
 }
 
 func (b *Backend) onConnected(c mqtt.Client) {

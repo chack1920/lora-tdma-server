@@ -1,6 +1,7 @@
 package tdma_session
 
 import (
+	"math"
 	"time"
 
 	"github.com/jmoiron/sqlx"
@@ -18,10 +19,18 @@ type tdmaSessionContext struct {
 	item storage.TdmaSessionItem
 }
 
+type schedulerIntervalContext struct {
+	//TODO
+	num uint8
+}
+
 var tdmaSessionTasks = []func(*tdmaSessionContext) error{
 	txMulticastData,
 	calcNextTime,
+	updateSchedulerContext,
 }
+
+var scheIntCtx schedulerIntervalContext
 
 func TdmaSessionSchedulerLoop() {
 	for {
@@ -29,7 +38,7 @@ func TdmaSessionSchedulerLoop() {
 		if err := ScheduleTdmaSession(); err != nil {
 			log.WithError(err).Error("tdma session scheduler error")
 		}
-		time.Sleep(config.C.TdmaServer.Scheduler.SchedulerInterval)
+		calcIntervalAndSleep()
 	}
 }
 
@@ -91,4 +100,26 @@ func calcNextTime(ctx *tdmaSessionContext) error {
 	item.Time = time.Now().Add(time.Duration(tdmaJoinItem.TxCycle) * time.Millisecond)
 	_ = storage.CreateTdmaSessionItemCache(config.C.Redis.Pool, item)
 	return nil
+}
+
+func updateSchedulerContext(ctx *tdmaSessionContext) error {
+	//TODO
+	scheIntCtx.num++
+	return nil
+}
+
+func calcIntervalAndSleep() {
+	var sleepTime time.Duration
+	//TODO: SF12 max payload: 2794ms
+	var timeOnAir int64 = 2794
+	var ceilVal int64 = int64(math.Ceil(float64(scheIntCtx.num) / 8))
+	sleepTime = time.Duration(timeOnAir*ceilVal + timeOnAir)
+	sleepTime *= time.Millisecond
+
+	if config.C.TdmaServer.Scheduler.SchedulerInterval > sleepTime {
+		sleepTime = config.C.TdmaServer.Scheduler.SchedulerInterval
+	}
+
+	scheIntCtx.num = 0
+	time.Sleep(config.C.TdmaServer.Scheduler.SchedulerInterval)
 }

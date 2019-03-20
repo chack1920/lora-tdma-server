@@ -61,7 +61,6 @@ func run(cmd *cobra.Command, args []string) error {
 		setPostgreSQLConnection,
 		setAppServerClient,
 		runDatabaseMigrations,
-		TestExample, //TODO:will remove, set tdma session cache here
 		startTdmaScheduler,
 		//TestExample,
 	}
